@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<title>Testing & Certification</title>
+</head>
+<body>
+
+	<div class="container mt-5">
+
+		<h1 class="mb-5" style="text-align: center;">Search Certificate</h1>
+
+		<form id="search_form" method="POST" action="/api/certificates/">
+			<div class="row">
+				<div class="col-10">
+					<input class="form-control" type="text" id="certificate_number" name="certificate_number" placeholder="Enter certificate number" required>
+				</div>
+				<div class="col-2">
+					<input class="form-control btn btn-primary" type="submit" value="Submit" >
+				</div>
+			</div>
+		</form>
+
+		<div class="mt-5">
+			<table id="records_table" class="table table-striped table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>Certificate Number</th>
+						<th>Report Number</th>
+						<th>Model Number</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+	<script>
+		$("#search_form").submit(function(e) {
+			e.preventDefault();
+
+			var form = $(this);
+			var url = form.attr('action');
+
+			$.ajax({
+				type: "GET",
+				url: url,
+				data: form.serialize(),
+				success: function(data)
+				{
+					$("#records_table tbody tr").remove();
+
+					$.each(data, function(i, item) {
+						$('<tr>').html("<td>" + data[i].certificate_number + "</td><td>" + data[i].report_number + "</td><td>" + data[i].model_number + "</td>").appendTo('#records_table');
+					});
+				}
+			});
+		});
+	</script>
+</body>
+</html>
